@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.2"
+    "chalk": "^2.3.1",
+    "express": "^4.16.2",
+    "volleyball": "^1.4.1"
   }
 }
