@@ -7,25 +7,26 @@ const tweetBank = require('../tweetBank');
 
 router.get('/', (req, res, next) => {
     let tweets = tweetBank.list();
-    res.render('index', { tweets: tweets });
+    res.render('index', { tweets: tweets, showForm: true });
 })
 
 router.get('/users/:name', (req, res, next) => {
     const name = req.params.name;
-    const list = tweetBank.find({ name: name })
-    res.render('index', { list: list })
+    const tweets = tweetBank.find({ name: name })
+    res.render('index', { tweets: tweets, showForm: false })
 })
 
 router.get('/tweets/:id', (req, res, next) => {
     const id = req.params.id
-    const tweet = tweetBank.find({ id: +id })
-    res.render('index', { tweet: tweet })
+    const tweets = tweetBank.find({ id: +id })
+    res.render('index', { tweets: tweets })
 })
 
-// router.post('/users/:id', (req, res, next) => {
-//     const id = req.params.id
-//     const newUser = tweetBank.add(req.body)
-//     res.render('index', { newUser: newUser })
-// })
+router.post('/tweets', (req, res, next) => {
+    const name = req.body.name
+    const text = req.body.text
+    tweetBank.add(name, text)
+    res.redirect('/')
+})
 
 module.exports = router;
