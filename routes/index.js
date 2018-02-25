@@ -10,5 +10,22 @@ router.get('/', (req, res, next) => {
     res.render('index', { tweets: tweets });
 })
 
+router.get('/users/:name', (req, res, next) => {
+    const name = req.params.name;
+    const list = tweetBank.find({ name: name })
+    res.render('index', { list: list })
+})
+
+router.get('/tweets/:id', (req, res, next) => {
+    const id = req.params.id
+    const tweet = tweetBank.find({ id: +id })
+    res.render('index', { tweet: tweet })
+})
+
+// router.post('/users/:id', (req, res, next) => {
+//     const id = req.params.id
+//     const newUser = tweetBank.add(req.body)
+//     res.render('index', { newUser: newUser })
+// })
 
 module.exports = router;

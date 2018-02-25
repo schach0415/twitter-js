@@ -5,7 +5,7 @@ const _ = require('lodash');
 var data = []
 
 function add(name, content){
-    data.push({ name: name, content: content })
+    data.push({ name: name, content: content, id: data.length })
 }
 
 function list(){
@@ -15,6 +15,7 @@ function list(){
 function find(properties){
     return _.cloneDeep(_.filter(data, properties))
 }
+
 
 module.exports = { add, list, find }
 
@@ -39,4 +40,4 @@ const randArrayEl = function(arr) {
   }
 
   //testing
-//   console.log(data)
+  console.log(data)
