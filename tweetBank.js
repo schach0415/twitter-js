@@ -39,4 +39,4 @@ const randArrayEl = function(arr) {
   }
 
   //testing
-  console.log(data)
+//   console.log(data)
