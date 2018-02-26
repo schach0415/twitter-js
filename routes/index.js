@@ -5,21 +5,35 @@ const router = express.Router();
 // could use one line instead: const router = require('express').Router();
 const tweetBank = require('../tweetBank');
 
+module.exports = function makeRouterWithSockets (io) {
+
 router.get('/', (req, res, next) => {
-    let tweets = tweetBank.list();
-    res.render('index', { tweets: tweets, showForm: true });
+    let allTheTweets = tweetBank.list();
+    res.render('index', {
+        title: 'Twitter.js',
+        tweets: allTheTweets,
+        showForm: true
+    });
 })
 
-router.get('/users/:name', (req, res, next) => {
-    const name = req.params.name;
-    const tweets = tweetBank.find({ name: name })
-    res.render('index', { tweets: tweets, showForm: false })
+router.get('/users/:username', (req, res, next) => {
+    const username = req.params.username;
+    const tweetsForName = tweetBank.find({ name: username })
+    res.render('index', {
+        title: 'Twitter.js',
+        tweets: tweetsForName,
+        showForm: true,
+        username: username
+    })
 })
 
 router.get('/tweets/:id', (req, res, next) => {
     const id = req.params.id
-    const tweets = tweetBank.find({ id: +id })
-    res.render('index', { tweets: tweets })
+    const tweetsWithThatId = tweetBank.find({ id: +id })
+    res.render('index', {
+        title: 'Twitter.js',
+        tweets: tweetsWithThatId,
+    })
 })
 
 router.post('/tweets', (req, res, next) => {
@@ -28,5 +42,6 @@ router.post('/tweets', (req, res, next) => {
     tweetBank.add(name, text)
     res.redirect('/')
 })
-
-module.exports = router;
+ 
+return router;
+}

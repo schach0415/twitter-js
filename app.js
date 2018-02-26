@@ -5,29 +5,37 @@ const app = express(); // creates an instance of an express application
 const chalk = require('chalk');
 const volleyball = require('volleyball');
 const nunjucks = require('nunjucks');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const socketio = require('socket.io');
+const path = require('path');
 
-const routes = require('./routes');
+const router = require('./routes');
 
-app.set('view engine', 'html'); // have res.render work with html files
-app.engine('html', nunjucks.render); // when giving html files to res.render, tell it to use nunjucks
-nunjucks.configure('views'); // point nunjucks to the proper directory for templates
+// templating boilerplate setup
+app.engine('html', nunjucks.render); // how to render html templates
+app.set('view engine', 'html'); // what file extension do our templates have
+nunjucks.configure('views', { noCache: true }); // where to find the views, caching off
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+// logging middleware
+app.use(volleyball)
 
-// parse application/json
-app.use(bodyParser.json())
+// body parsing middleware
+app.use(bodyParser.urlencoded({ extended: true })); // for HTML form submits
+app.use(bodyParser.json()); // would be for AJAX requests
 
-app.use(express.static(__dirname + '/public'))
+// start the server
+var server = app.listen(1337, function(){
+    console.log('listening on port 1337');
+});
+var io = socketio.listen(server);
 
-app.use('/', routes);
+// the typical way to use express static middleware
+app.use(express.static(path.join(__dirname, '/public')));
 
+// modular routing that uses io inside it
+app.use('/', router(io));
+
+  
 // app.use((req, res, next) => {
 //     res.sendFile(__dirname + '/public' + req.url)
 // })
-
-
-app.listen(3000, () => {
-    console.log('server listening')
-})
